@@ -42,3 +42,10 @@ If you want to use a package manager:
   use http:://<atlantis_load_balancer_hostname> and atlantis_secret values from AWS secret manager
 
 ## Verify
+- confikgure kubectl with new eks cluster :
+  aws eks --region eu-central-1 update-kubeconfig --name d<your cluster name>
+  verify atlantis with e.e kubectl get all:
+ ![img.png](images/kubectl.png)
+- make pull request and verify atlantis in action:
+ 
+  
