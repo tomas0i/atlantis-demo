@@ -46,6 +46,27 @@ If you want to use a package manager:
   aws eks --region eu-central-1 update-kubeconfig --name d<your cluster name>
   verify atlantis with e.e kubectl get all:
  ![img.png](images/kubectl.png)
-- make pull request and verify atlantis in action:
+- make a pull request and verify atlantis in action:
+ ![img.png](images/atlantis1.png)
+ ![img.png](images/atlantis2.png)
+- check in atlantis runner endpoint http://<elb endpoint>
+ ![img_1.png](images/atlantis3.png)
+
+## Verify cluster RBAC:
+
+- setup aws profiles for manage and readonly IAM users that assume respective roles 
+  role ARNs should be:
+  arn:aws:iam::<AWS_ACCOUNT_ID>:role/<EKS_CLUSTER_NAME>-eks-readonly
+  and
+  arn:aws:iam::<AWS_ACCOUNT_ID>:role/<EKS_CLUSTER_NAME>-eks-admin
+- verify read only role:
+  aws eks --region eu-central-1 update-kubeconfig --name <EKS_CLUSTER_NAME> --profile eks-viewer
+  ![img.png](images/ro.png)
+- verify cluste admin role
+  aws eks --region eu-central-1 update-kubeconfig --name <EKS_CLUSTER_NAME> --profile eks-admin
+ ![img.png](images/adm.png)
+  
+  
+  
  
   
