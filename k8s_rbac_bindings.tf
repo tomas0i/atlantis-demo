@@ -1,9 +1,3 @@
-# provider "kubernetes" {
-#   config_path = "~/.kube/config"
-# }
-
-
-
 resource "kubernetes_cluster_role" "eks_read_only_role" {
   metadata {
     name = "readonly"
