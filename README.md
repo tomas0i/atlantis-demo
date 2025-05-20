@@ -5,27 +5,24 @@
 
 - generate  access token for github :https://www.runatlantis.io/docs/access-credentials.html#github-user
 - deploy terraform   backend resources : https://github.com/tomas0i/atlantis-demo/blob/main/prep/tf_backend/backend.tf
+
  ![img.png](images/img.png)
-  upadate terraform backend config with s3 bucket name in https://github.com/tomas0i/atlantis-demo/blob/main/terraform.tf#L3
+
+  update terraform backend config with s3 bucket name in https://github.com/tomas0i/atlantis-demo/blob/main/terraform.tf#L4
+
 - set up required secrets in AWS secrets manager:
-  name should match: one defined in variables.tf :
+  name should match: one defined in variables.tf:
   https://github.com/tomas0i/atlantis-demo/blob/main/variables.tf#L20
 
-  github token ,
+  github token,
   atlantis secret,
   aws credentials (with enough permissions for atlantis to execute terraform)
   
   ![img.png](images/secrets.png)
-  (can be created from terraform:
+  can be created from terraform:
   https://github.com/tomas0i/atlantis-demo/blob/main/prep/secrets/secrets.tf
 
 ## Deploy EKS cluster and atlantis helm chart with terraform
-
-Binary downloads of the Helm client can be found on [the Releases page](https://github.com/helm/helm/releases/latest).
-
-Unpack the `helm` binary and add it to your PATH and you are good to go!
-
-If you want to use a package manager:
 
 - execute terarform init, terraform plan  and apply from main directory
   once resources created, note the value of atlantis_load_balancer_hostname output:
@@ -42,14 +39,20 @@ If you want to use a package manager:
   use http:://<atlantis_load_balancer_hostname> and atlantis_secret values from AWS secret manager
 
 ## Verify
-- confikgure kubectl with new eks cluster :
+- configure kubectl with new eks cluster :
   aws eks --region eu-central-1 update-kubeconfig --name d<your cluster name>
   verify atlantis with e.e kubectl get all:
+
  ![img.png](images/kubectl.png)
+
 - make a pull request and verify atlantis in action:
+
  ![img.png](images/atlantis1.png)
+
  ![img.png](images/atlantis2.png)
+
 - check in atlantis runner endpoint http://<elb endpoint>
+
  ![img_1.png](images/atlantis3.png)
 
 ## Verify cluster RBAC:
@@ -57,14 +60,21 @@ If you want to use a package manager:
 - setup aws profiles for manage and readonly IAM users that assume respective roles 
   role ARNs should be:
   arn:aws:iam::<AWS_ACCOUNT_ID>:role/<EKS_CLUSTER_NAME>-eks-readonly
+
   and
+
   arn:aws:iam::<AWS_ACCOUNT_ID>:role/<EKS_CLUSTER_NAME>-eks-admin
+
 - verify read only role:
   aws eks --region eu-central-1 update-kubeconfig --name <EKS_CLUSTER_NAME> --profile eks-viewer
+
   ![img.png](images/ro.png)
-- verify cluste admin role
+
+- verify cluster admin role
+
   aws eks --region eu-central-1 update-kubeconfig --name <EKS_CLUSTER_NAME> --profile eks-admin
- ![img.png](images/adm.png)
+
+  ![img.png](images/adm.png)
   
   
   
