@@ -16,6 +16,8 @@ resource "kubernetes_storage_class" "ebs_sc_1" {
     encrypted = "true"
   }
   allow_volume_expansion = true
+
+  depends_on = [module.eks]
 }
 
 resource "helm_release" "atlantis" {
@@ -33,8 +35,8 @@ resource "helm_release" "atlantis" {
   #TODO use preconfigured dns name and terraform resource to create CNAME entry in Route53
   set {
     name  = "atlantisUrl"
-    # use value of "terraform output example_app_load_balancer_hostnam"
-    value = "<ADD VALUE THIS LATER>"
+    # use value of "terraform output example_app_load_balancer_hostname"
+    value = "http://aa8651be819d34b15b6643e86a1fe00f-220741403.eu-central-1.elb.amazonaws.com"
   }
 
 
@@ -90,6 +92,7 @@ resource "helm_release" "atlantis" {
     name  = "resources.limits.memory"
     value = "1Gi"
   }
+  depends_on = [module.eks]
 }
 
 
